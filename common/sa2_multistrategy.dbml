@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="sa2_multistrategy" Class="Sa2_multistrategy" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Table Name="dbo.tbl_data_fields" Member="Tbl_data_fields">
+    <Type Name="Tbl_data_fields">
+      <Column Name="FieldId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FieldName" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SA2Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Tbl_data_fields_Tbl_equity_data" Member="Tbl_equity_data" ThisKey="FieldId" OtherKey="FieldId" Type="Tbl_equity_data" />
+      <Association Name="Tbl_data_fields_Tbl_market_data" Member="Tbl_market_data" ThisKey="FieldId" OtherKey="FieldId" Type="Tbl_market_data" />
+      <Association Name="Tbl_data_fields_Tbl_market_data_changes" Member="Tbl_market_data_changes" ThisKey="FieldId" OtherKey="FieldId" Type="Tbl_market_data_changes" />
+      <Association Name="Tbl_data_fields_Tbl_static_data" Member="Tbl_static_data" ThisKey="FieldId" OtherKey="FieldId" Type="Tbl_static_data" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbl_data_sources" Member="Tbl_data_sources">
+    <Type Name="Tbl_data_sources">
+      <Column Name="SourceId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SourceName" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Tbl_data_sources_Tbl_equity_data" Member="Tbl_equity_data" ThisKey="SourceId" OtherKey="SourceId" Type="Tbl_equity_data" />
+      <Association Name="Tbl_data_sources_Tbl_market_data" Member="Tbl_market_data" ThisKey="SourceId" OtherKey="SourceId" Type="Tbl_market_data" />
+      <Association Name="Tbl_data_sources_Tbl_market_data_changes" Member="Tbl_market_data_changes" ThisKey="SourceId" OtherKey="NewSourceId" Type="Tbl_market_data_changes" />
+      <Association Name="Tbl_data_sources_Tbl_market_data_changes1" Member="Source" ThisKey="SourceId" OtherKey="OldSourceId" Type="Tbl_market_data_changes" />
+      <Association Name="Tbl_data_sources_Tbl_static_data" Member="Tbl_static_data" ThisKey="SourceId" OtherKey="SourceId" Type="Tbl_static_data" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbl_equity_data" Member="Tbl_equity_data">
+    <Type Name="Tbl_equity_data">
+      <Column Name="InstrumentId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FieldId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Value" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Date" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SourceId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Divisor" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="Tbl_data_fields_Tbl_equity_data" Member="Tbl_data_fields" ThisKey="FieldId" OtherKey="FieldId" Type="Tbl_data_fields" IsForeignKey="true" />
+      <Association Name="Tbl_data_sources_Tbl_equity_data" Member="Tbl_data_sources" ThisKey="SourceId" OtherKey="SourceId" Type="Tbl_data_sources" IsForeignKey="true" />
+      <Association Name="Tbl_instruments_Tbl_equity_data" Member="Tbl_instruments" ThisKey="InstrumentId" OtherKey="InstrumentId" Type="Tbl_instruments" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbl_equity_universe" Member="Tbl_equity_universe">
+    <Type Name="Tbl_equity_universe">
+      <Column Name="Date" Type="System.DateTime" DbType="Date NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Criterion" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InstrumentId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Tbl_instruments_Tbl_equity_universe" Member="Tbl_instruments" ThisKey="InstrumentId" OtherKey="InstrumentId" Type="Tbl_instruments" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbl_index_members" Member="Tbl_index_members">
+    <Type Name="Tbl_index_members">
+      <Column Name="IndexId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="StockId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Weight" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Date" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Tbl_instruments_Tbl_index_members" Member="Tbl_instruments" ThisKey="IndexId" OtherKey="InstrumentId" Type="Tbl_instruments" IsForeignKey="true" />
+      <Association Name="Tbl_instruments_Tbl_index_members1" Member="Stock" ThisKey="StockId" OtherKey="InstrumentId" Type="Tbl_instruments" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbl_instruments" Member="Tbl_instruments">
+    <Type Name="Tbl_instruments">
+      <Column Name="InstrumentId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="InstrumentTicker" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Sa2Symbol" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Tbl_instruments_Tbl_equity_data" Member="Tbl_equity_data" ThisKey="InstrumentId" OtherKey="InstrumentId" Type="Tbl_equity_data" />
+      <Association Name="Tbl_instruments_Tbl_equity_universe" Member="Tbl_equity_universe" ThisKey="InstrumentId" OtherKey="InstrumentId" Type="Tbl_equity_universe" />
+      <Association Name="Tbl_instruments_Tbl_index_members" Member="Tbl_index_members" ThisKey="InstrumentId" OtherKey="IndexId" Type="Tbl_index_members" />
+      <Association Name="Tbl_instruments_Tbl_index_members1" Member="Instrument" ThisKey="InstrumentId" OtherKey="StockId" Type="Tbl_index_members" />
+      <Association Name="Tbl_instruments_Tbl_market_data" Member="Tbl_market_data" ThisKey="InstrumentId" OtherKey="InstrumentId" Type="Tbl_market_data" />
+      <Association Name="Tbl_instruments_Tbl_market_data_changes" Member="Tbl_market_data_changes" ThisKey="InstrumentId" OtherKey="InstrumentId" Type="Tbl_market_data_changes" />
+      <Association Name="Tbl_instruments_Tbl_rate_universe" Member="Tbl_rate_universe" ThisKey="InstrumentId" OtherKey="InstrumentId" Type="Tbl_rate_universe" />
+      <Association Name="Tbl_instruments_Tbl_static_data" Member="Tbl_static_data" ThisKey="InstrumentId" OtherKey="InstrumentId" Type="Tbl_static_data" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbl_market_data" Member="Tbl_market_data">
+    <Type Name="Tbl_market_data">
+      <Column Name="InstrumentId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FieldId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Value" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Date" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SourceId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Divisor" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="Tbl_data_fields_Tbl_market_data" Member="Tbl_data_fields" ThisKey="FieldId" OtherKey="FieldId" Type="Tbl_data_fields" IsForeignKey="true" />
+      <Association Name="Tbl_data_sources_Tbl_market_data" Member="Tbl_data_sources" ThisKey="SourceId" OtherKey="SourceId" Type="Tbl_data_sources" IsForeignKey="true" />
+      <Association Name="Tbl_instruments_Tbl_market_data" Member="Tbl_instruments" ThisKey="InstrumentId" OtherKey="InstrumentId" Type="Tbl_instruments" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbl_market_data_changes" Member="Tbl_market_data_changes">
+    <Type Name="Tbl_market_data_changes">
+      <Column Name="InstrumentId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FieldId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OldValue" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="NewValue" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="DateOfChange" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="OldSourceId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="NewSourceId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OldDivisor" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="NewDivisor" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="ChangeId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Tbl_data_fields_Tbl_market_data_changes" Member="Tbl_data_fields" ThisKey="FieldId" OtherKey="FieldId" Type="Tbl_data_fields" IsForeignKey="true" />
+      <Association Name="Tbl_data_sources_Tbl_market_data_changes" Member="Tbl_data_sources" ThisKey="NewSourceId" OtherKey="SourceId" Type="Tbl_data_sources" IsForeignKey="true" />
+      <Association Name="Tbl_data_sources_Tbl_market_data_changes1" Member="OldSource" ThisKey="OldSourceId" OtherKey="SourceId" Type="Tbl_data_sources" IsForeignKey="true" />
+      <Association Name="Tbl_instruments_Tbl_market_data_changes" Member="Tbl_instruments" ThisKey="InstrumentId" OtherKey="InstrumentId" Type="Tbl_instruments" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbl_rate_universe" Member="Tbl_rate_universe">
+    <Type Name="Tbl_rate_universe">
+      <Column Name="Criterion" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InstrumentId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Date" Type="System.DateTime" DbType="Date NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Tbl_instruments_Tbl_rate_universe" Member="Tbl_instruments" ThisKey="InstrumentId" OtherKey="InstrumentId" Type="Tbl_instruments" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbl_static_data" Member="Tbl_static_data">
+    <Type Name="Tbl_static_data">
+      <Column Name="InstrumentId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FieldId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Value" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SourceId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Tbl_data_fields_Tbl_static_data" Member="Tbl_data_fields" ThisKey="FieldId" OtherKey="FieldId" Type="Tbl_data_fields" IsForeignKey="true" />
+      <Association Name="Tbl_data_sources_Tbl_static_data" Member="Tbl_data_sources" ThisKey="SourceId" OtherKey="SourceId" Type="Tbl_data_sources" IsForeignKey="true" />
+      <Association Name="Tbl_instruments_Tbl_static_data" Member="Tbl_instruments" ThisKey="InstrumentId" OtherKey="InstrumentId" Type="Tbl_instruments" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
